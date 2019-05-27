@@ -2,17 +2,27 @@
 
 /* global document */
 
-// import React from 'react';
-// import {render} from 'react-dom';
+import type {Node} from 'react';
+import React, {Component} from 'react';
+import {render} from 'react-dom';
+type PassedPropsType = {||};
+type StateType = null;
 
-import {h, render, Component} from 'preact';
+class Clock extends Component<PassedPropsType, StateType> {
+    render(): Node {
+        const time = new Date().toLocaleTimeString();
 
-class Clock extends Component {
-    render() {
-        let time = new Date().toLocaleTimeString();
-        return <span>1111</span>;
+        return <span>{time}</span>;
     }
 }
 
-// render an instance of Clock into <body>:
-render(<Clock/>, document.body);
+const nodeWrapper = document.querySelector('.js-app-wrapper');
+
+if (nodeWrapper !== null) {
+    render(<Clock/>, nodeWrapper);
+} else {
+    console.error('Can not find nodeWrapper');
+}
+
+// // render an instance of Clock into <body>:
+// render(<Clock/>, document.body.querySelector('.js-app-wrapper') || document.createElement('div'));
