@@ -1,16 +1,22 @@
 // @flow
 declare module 'mobx-state-tree' {
-    declare class Model {
-        constructor<PropertyType>(name: string, type: {}): Model<PropertyType>,
-        // actions(func: (self: Model) => mixed): Model,
+    declare export type ActionModelType<PropertyType, ActionType> = $Exact<{
+        ...PropertyType,
+        ...ActionType,
+    }>;
+
+    declare class Model<PropertyType, ActionType> {
+        constructor(name: string, type: $Call<ExtractReturnType, PropertyType>): Model<PropertyType, ActionType>,
+        actions<PropertyType, ActionType>((self: ActionModelType<PropertyType, ActionType>) => ActionType): Model<PropertyType, ActionType>,
         // create(initialState: {}): Store,
     }
+
 
     declare type ModelType<NativeType> = NativeType;
     declare type ExtractReturnType = <V>(V) => ModelType<V>;
 
     declare export var types: {|
-        +model: <PropertyType>(name: string, type: $Call<ExtractReturnType, PropertyType>) => Model<PropertyType>,
+        +model: <PropertyType, ActionType>(name: string, type: $Call<ExtractReturnType, PropertyType>) => Model<PropertyType, ActionType>,
 
         +boolean: ModelType<boolean>,
         +number: ModelType<number>,
