@@ -1,4 +1,4 @@
-// @flow
+// @flow11111
 
 /* global document */
 
@@ -11,7 +11,7 @@ import {App} from './component/app/c-app';
 const nodeWrapper = document.querySelector('.js-app-wrapper');
 
 if (nodeWrapper !== null) {
-    render(<App todoList={TodoListStore}/>, nodeWrapper);
+    render(<App rr={1} todoList={TodoListStore}/>, nodeWrapper);
 } else {
     console.error('Can not find nodeWrapper');
 }

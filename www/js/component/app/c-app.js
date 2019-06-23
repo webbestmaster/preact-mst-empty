@@ -1,8 +1,11 @@
+// @flow1111
+
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 
 type PassedPropsType = {
+    +rr: string,
     // TODO: add todoList
 };
 
@@ -14,4 +17,4 @@ class AppComponent extends Component<PassedPropsType, StateType> {
     }
 }
 
-export const App = observer(AppComponent);
+export const App = observer<AppComponent<PassedPropsType, StateType>>(AppComponent);
