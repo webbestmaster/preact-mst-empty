@@ -1,21 +1,33 @@
-// @flow111
+// @flow
 
 import {types} from 'mobx-state-tree';
-import {connectReduxDevtools} from 'mst-middlewares';
-import remotedev from 'remotedev';
+import type {ActionModelType} from 'mobx-state-tree';
+// import {connectReduxDevtools} from 'mst-middlewares';
+// import remotedev from 'remotedev';
 
 import {Todo} from './todo';
 
-export const TodoList = types
-    .model('TodoList', {
-        todoList: types.array(Todo),
-    })
-    .actions(self => ({
-        push(todo) {
-            self.todoList.push(todo);
-        },
-    }));
+type TodoListModelPropertyType = {|
+    todoList: Array<typeof Todo>,
+|};
 
+type TodoListModelActionType = {|
+    +push: (todo: typeof Todo) => void,
+|};
+
+export const TodoList = types
+    .model<TodoListModelPropertyType, TodoListModelActionType>('TodoList', {
+        todoList: types.array<typeof Todo>(Todo),
+    })
+    .actions<TodoListModelPropertyType, TodoListModelActionType>(
+        (self: ActionModelType<TodoListModelPropertyType, TodoListModelActionType>): TodoListModelActionType => ({
+            push(todo: typeof Todo) {
+                self.todoList.push(todo);
+            },
+        })
+    );
+
+/*
 const todoListInitialState = {
     todoList: [
         {
@@ -32,5 +44,6 @@ const todoListInitialState = {
 };
 
 export const TodoListStore = TodoList.create(todoListInitialState);
+*/
 
-connectReduxDevtools(remotedev, TodoListStore);
+// connectReduxDevtools(remotedev, TodoListStore);

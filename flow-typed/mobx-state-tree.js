@@ -1,8 +1,8 @@
 // @flow
 declare module 'mobx-state-tree' {
     declare export type ActionModelType<PropertyType, ActionType> = $Exact<{
-        ...PropertyType,
-        ...ActionType,
+        ...$Exact<PropertyType>,
+        ...$Exact<ActionType>,
     }>;
 
     declare class Model<PropertyType, ActionType> {
