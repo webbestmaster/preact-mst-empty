@@ -1,15 +1,10 @@
 {
     "presets": [
         "@babel/preset-env",
+        "@babel/preset-react",
         "@babel/preset-flow"
     ],
     "plugins": [
-        [
-            "@babel/plugin-transform-react-jsx",
-            {
-                "jsxPragma": "h"
-            }
-        ],
         "@babel/plugin-transform-strict-mode",
         "@babel/plugin-transform-runtime",
         "babel-plugin-transform-class-properties",

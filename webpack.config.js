@@ -10,7 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer'); // eslint-disable-line no-unused-vars
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -41,26 +41,18 @@ const definePluginParams = {
     // IS_DEVELOPMENT: JSON.stringify(IS_DEVELOPMENT)
 };
 
-const fileRegExp = /\.(png|jpg|jpeg|gif|svg|woff2?)$/;
+const fileRegExp = /\.(png|jpg|jpeg|gif|svg|otf|ttf|woff2?)$/;
 
 const pathToDist = '/dist';
 
-const duplicateList = [
-    '/@babel/runtime',
-    'warning',
-    'invariant',
-    'hoist-non-react-statics',
-];
+const duplicateList = ['/@babel/runtime', 'warning', 'invariant', 'hoist-non-react-statics'];
 
 const alias = duplicateList.reduce((accumulator, packageName) => {
     return {...accumulator, [packageName]: path.resolve(CWD, `node_modules/${packageName}`)};
 }, {});
 
 const webpackConfig = {
-    entry: [
-        './www/css/root.scss',
-        './www/js/root.js',
-    ],
+    entry: ['./www/css/root.scss', './www/js/root.js'],
     output: {
         path: path.join(CWD, pathToDist),
         publicPath: '/',
@@ -89,9 +81,9 @@ const webpackConfig = {
                             reuseExistingChunk: true,
                             test: /\.s?css$/,
                         },
-                        image: {
+                        asset: {
                             chunks: 'initial',
-                            name: 'image',
+                            name: 'asset',
                             priority: -15,
                             test: fileRegExp,
                         },
@@ -143,7 +135,7 @@ const webpackConfig = {
                         // - name - The name is a standard option.
                         query: {
                             limit: IS_PRODUCTION ? 10e3 : 1, // 10k bytes for production
-                            name: 'img/img-[name]-[hash:6].[ext]',
+                            name: 'asset/[name]-[hash:6].[ext]',
                         },
                     },
                     {
@@ -193,8 +185,9 @@ const webpackConfig = {
                         loader: 'css-loader',
                         options: {
                             sourceMap: IS_DEVELOPMENT,
-                            modules: true,
-                            localIdentName: IS_DEVELOPMENT ? '[local]----[hash:6]' : '[hash:6]', // '[local]----[path]--[name]--[hash:6]'
+                            modules: {
+                                localIdentName: IS_DEVELOPMENT ? '[local]----[hash:6]' : '[hash:6]', // '[local]----[path]--[name]--[hash:6]'
+                            },
                         },
                     },
                     {
@@ -229,8 +222,9 @@ const webpackConfig = {
                         loader: 'css-loader',
                         options: {
                             sourceMap: IS_DEVELOPMENT,
-                            modules: true,
-                            localIdentName: '[local]',
+                            modules: {
+                                localIdentName: '[local]', // '[local]----[path]--[name]--[hash:6]'
+                            },
                         },
                     },
                     {
@@ -247,11 +241,7 @@ const webpackConfig = {
         ],
     },
     resolve: {
-        alias: {
-            ...alias,
-            react: 'preact-compat',
-            'react-dom': 'preact-compat',
-        },
+        alias,
     },
     plugins: [
         new DuplicatePackageCheckerPlugin(),
